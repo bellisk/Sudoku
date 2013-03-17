@@ -115,12 +115,10 @@ def solve(grid):
                 for c2 in two_number_cells2:
                     if c2 == c:
                         for cell in shape:
-                            if type(cell) == list and c[0] in cell and cell != c:
-                                cell.remove(c[0])
-                                made_progress = True
-                            if type(cell) == list and c[1] in cell and cell != c:
-                                cell.remove(c[1])
-                                made_progress = True
+                            for value in c:
+                                if type(cell) == list and value in cell and cell != c:
+                                    cell.remove(value)
+                                    made_progress = True
             clean_grid(grid)
         print diff(prev_grid, grid)
     return grid
