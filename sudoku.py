@@ -86,11 +86,13 @@ def clean_grid(grid):
 			if type(cell) == list and len(cell) == 1:
 				row[cell_index] = cell[0]
 
+import copy
+
 def solve(grid):
 	made_progress = True
+	print diff(None, grid)
 	while made_progress and not solved_grid(grid):
-		#print simple_representation(grid)
-		#print "---------"
+		prev_grid = copy.deepcopy(grid)
 		made_progress = False
 		for shape in get_shapes(grid):
 			numbers = []
@@ -103,5 +105,29 @@ def solve(grid):
 						cell.remove(n)
 						made_progress = True
 			clean_grid(grid)
+		print diff(prev_grid, grid)
 	return grid
 
+def diff(prev_grid, grid):
+	html = "<div style=\"font-family: Courier; color: grey;\">" + "-" * 37 + "<br>\n"
+	for y in range(27):
+		g_y = y / 3
+		html += "|"
+		for x in range(27):
+			g_x = x / 3
+			num = (y % 3) * 3 + x % 3 + 1
+			if grid[g_y][g_x] == num or (type(grid[g_y][g_x]) == list and num in grid[g_y][g_x] and len(grid[g_y][g_x]) == 1):
+				html += "<span style=\"color: green;\">" + str(num) + "</span>"
+			elif type(grid[g_y][g_x]) == list and num in grid[g_y][g_x]:
+				html += str(num)
+			elif prev_grid and type(prev_grid[g_y][g_x]) == list and num in prev_grid[g_y][g_x]:
+				html += "<span style=\"color: red;\">" + str(num) + "</span>"
+			else:
+				html += "&nbsp;"
+			if x % 3 == 2:
+				html += "|"
+		html += "<br>\n"
+		if y % 3 == 2:
+			html += "-" * 37 + "<br>\n"
+	html += "</div><br><br>"
+	return html
